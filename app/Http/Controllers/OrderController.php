@@ -64,25 +64,67 @@ class OrderController extends Controller
             ->with('success', 'Bukti pembayaran berhasil diupload. Menunggu verifikasi admin.');
     }
 
-    public function cancel($orderNumber)
+    public function cancel(Request $request, $orderNumber)
+    {
+        $request->validate([
+            'cancel_reason' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $order = Order::where('order_number', $orderNumber)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $order->update([
+            'status' => 'cancel_request',
+            'cancel_reason' => $request->cancel_reason,
+        ]);
+
+        return back()->with(
+            'success',
+            'Permintaan pembatalan berhasil dikirim.'
+        );
+    }
+    
+    public function complete($orderNumber)
     {
         $order = Order::where('order_number', $orderNumber)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        if (!$order->canBeCancelled()) {
-            return redirect()->back()->with('error', 'Pesanan ini tidak dapat dibatalkan.');
-        }
-
-        // Restore stock
-        foreach ($order->items as $item) {
-            $item->product->increment('stock', $item->quantity);
+        if ($order->status !== 'dikirim') {
+            return redirect()->back()
+                ->with('error', 'Pesanan belum dapat diselesaikan.');
         }
 
         $order->update([
-            'status' => 'dibatalkan',
+            'status' => 'selesai',
+            'completed_at' => now(),
         ]);
 
-        return redirect()->back()->with('success', 'Pesanan berhasil dibatalkan.');
+        return redirect()->back()
+            ->with('success', 'Pesanan berhasil diselesaikan.');
+    }
+    public function approveCancel(Order $order)
+    {
+        $order->update([
+            'status' => 'dibatalkan'
+        ]);
+
+        return back()->with(
+            'success',
+            'Permintaan pembatalan disetujui.'
+        );
+    }
+
+    public function rejectCancel(Order $order)
+    {
+        $order->update([
+            'status' => 'diproses'
+        ]);
+
+        return back()->with(
+            'success',
+            'Permintaan pembatalan ditolak.'
+        );
     }
 }

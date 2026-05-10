@@ -63,19 +63,6 @@
                                             Upload Bukti Bayar
                                         </a>
                                     <?php endif; ?>
-
-                                    <?php if($order->canBeCancelled()): ?>
-                                        <form action="<?php echo e(route('orders.cancel', $order->order_number)); ?>" method="POST"
-                                            class="inline">
-                                            <?php echo csrf_field(); ?>
-                                            <button type="submit"
-                                                onclick="return confirm('Yakin ingin membatalkan pesanan ini?')"
-                                                class="inline-flex items-center text-red-500 font-medium hover:text-red-700">
-                                                <i data-lucide="x-circle" class="w-4 h-4 mr-1"></i>
-                                                Batalkan
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

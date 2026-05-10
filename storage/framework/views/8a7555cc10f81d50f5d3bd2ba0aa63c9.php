@@ -9,7 +9,7 @@
         </div>
 
         <!-- Settings Form -->
-        <form action="<?php echo e(route('admin.settings.update')); ?>" method="POST"
+        <form action="<?php echo e(route('admin.settings.update')); ?>" method="POST" enctype="multipart/form-data"
             class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <?php echo csrf_field(); ?>
 
@@ -98,8 +98,34 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">QRIS</label>
                         <input type="file" name="qris_image" class="w-full border rounded-lg p-2">
 
-                        <?php if(isset($settings['qris_image'])): ?>
-                            <img src="<?php echo e(asset('storage/' . $settings['qris_image'])); ?>" class="mt-2 w-40">
+                        <!-- Preview Cropper -->
+                        <div class="mt-4">
+                            <img id="preview" class="max-w-sm hidden rounded-lg border">
+                        </div>
+
+                        <p class="text-xs text-gray-500 mt-2">
+                            Geser area QR code lalu klik tombol Crop QRIS
+                        </p>
+
+                        <button type="button" id="crop-button"
+                            class="mt-3 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 hidden">
+                            Crop QRIS
+                        </button>
+
+                        <div class="mt-4 hidden" id="cropped-result">
+                            <p class="text-sm text-gray-500 mb-2">Hasil Crop</p>
+                            <img id="cropped-preview" class="w-40 rounded-lg border">
+                        </div>
+
+                        <input type="hidden" name="cropped_qris" id="cropped_qris">>
+
+                        <?php if(!empty($settings['qris_image'])): ?>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-500 mb-2">QRIS Saat Ini</p>
+
+                                <img src="<?php echo e(asset('storage/' . $settings['qris_image']) . '?v=' . time()); ?>"
+                                    class="w-40 rounded-lg border">
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -114,6 +140,77 @@
             </div>
         </form>
     </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+    <script>
+        let cropper;
+
+        const input = document.querySelector('input[name="qris_image"]');
+        const preview = document.getElementById('preview');
+        const cropButton = document.getElementById('crop-button');
+        const croppedInput = document.getElementById('cropped_qris');
+        const croppedPreview = document.getElementById('cropped-preview');
+        const croppedResult = document.getElementById('cropped-result');
+
+        input.addEventListener('change', function(e) {
+
+            const file = e.target.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+
+                preview.src = event.target.result;
+                preview.classList.remove('hidden');
+                cropButton.classList.remove('hidden');
+
+                if (cropper) {
+                    cropper.destroy();
+                }
+
+                cropper = new Cropper(preview, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 1,
+                });
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        cropButton.addEventListener('click', function() {
+
+            if (!cropper) return;
+
+            const canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500
+            });
+
+            const croppedData = canvas.toDataURL('image/png');
+
+            // simpan ke hidden input
+            croppedInput.value = croppedData;
+
+            // preview hasil crop
+            croppedPreview.src = croppedData;
+            croppedResult.classList.remove('hidden');
+
+            // sembunyikan area crop
+            preview.classList.add('hidden');
+
+            // sembunyikan tombol crop
+            cropButton.classList.add('hidden');
+
+            // destroy cropper
+            cropper.destroy();
+            cropper = null;
+        });
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\zulfa\OneDrive\Documents\amelia-hantaran\resources\views/admin/settings/index.blade.php ENDPATH**/ ?>

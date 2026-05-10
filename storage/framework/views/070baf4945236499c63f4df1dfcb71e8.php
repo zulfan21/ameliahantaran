@@ -34,8 +34,8 @@
                         <div class="flex justify-center mb-6">
                             <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-200">
 
-                                <?php if(isset($settings['qris_image'])): ?>
-                                    <img src="<?php echo e(asset('storage/' . $settings['qris_image'])); ?>"
+                                <?php if(!empty($settings['qris_image'])): ?>
+                                    <img src="<?php echo e(asset('storage/' . $settings['qris_image']) . '?v=' . time()); ?>"
                                         class="w-48 h-48 object-contain">
                                 <?php else: ?>
                                     <p class="text-red-500 text-center">QRIS belum tersedia</p>

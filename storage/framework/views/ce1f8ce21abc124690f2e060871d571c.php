@@ -79,42 +79,6 @@
             </div>
 
             <div class="lg:col-span-3">
-                <h3 class="font-semibold text-lg mb-6 text-white tracking-wide">Layanan Pelanggan</h3>
-                <ul class="space-y-3">
-                    <li>
-                        <a href="#"
-                            class="group flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm">
-                            <i data-lucide="chevron-right"
-                                class="w-4 h-4 mr-2 transition-transform group-hover:translate-x-1"></i> Cara Pemesanan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                            class="group flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm">
-                            <i data-lucide="chevron-right"
-                                class="w-4 h-4 mr-2 transition-transform group-hover:translate-x-1"></i> Syarat &
-                            Ketentuan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                            class="group flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm">
-                            <i data-lucide="chevron-right"
-                                class="w-4 h-4 mr-2 transition-transform group-hover:translate-x-1"></i> Kebijakan
-                            Privasi
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                            class="group flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm">
-                            <i data-lucide="chevron-right"
-                                class="w-4 h-4 mr-2 transition-transform group-hover:translate-x-1"></i> FAQ
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="lg:col-span-3">
                 <h3 class="font-semibold text-lg mb-6 text-white tracking-wide">Hubungi Kami</h3>
                 <ul class="space-y-4">
                     <li class="flex items-start">

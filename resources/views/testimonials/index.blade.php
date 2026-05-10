@@ -20,32 +20,74 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @auth
                 <div class="text-center mb-12">
-                    <a href="{{ route('testimonials.create') }}" class="inline-flex items-center bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors">
+                    <a href="{{ route('testimonials.create') }}"
+                        class="inline-flex items-center bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors">
                         <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
                         Tulis Testimoni
                     </a>
                 </div>
             @endauth
 
-            @if($testimonials->count() > 0)
+            @if ($testimonials->count() > 0)
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($testimonials as $testimonial)
+                    @foreach ($testimonials as $testimonial)
                         <div class="bg-cream-50 rounded-xl p-6 hover:shadow-md transition-shadow">
                             <div class="flex items-center mb-4">
                                 <div class="flex text-secondary-400">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i data-lucide="star" class="w-5 h-5 {{ $i <= $testimonial->rating ? 'fill-current' : '' }}"></i>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i data-lucide="star"
+                                            class="w-5 h-5 {{ $i <= $testimonial->rating ? 'fill-current' : '' }}"></i>
                                     @endfor
                                 </div>
                             </div>
+                            @if ($testimonial->photo)
+                                <!-- Thumbnail -->
+                                <div class="mb-4 overflow-hidden rounded-lg cursor-pointer"
+                                    onclick="document.getElementById('testimonial-modal-{{ $testimonial->id }}').classList.remove('hidden');
+                                    document.getElementById('testimonial-modal-{{ $testimonial->id }}').classList.add('flex');">
+
+                                    <img src="{{ asset('storage/' . $testimonial->photo) }}" alt="Foto Testimoni"
+                                        class="w-full h-56 object-cover rounded-lg hover:scale-105 transition-transform duration-300">
+                                </div>
+
+                                <!-- Modal -->
+                                <div id="testimonial-modal-{{ $testimonial->id }}"
+                                    class="hidden fixed inset-0 z-[9999] bg-black/90 items-center justify-center p-4">
+
+                                    <!-- background close -->
+                                    <div class="absolute inset-0"
+                                        onclick="document.getElementById('testimonial-modal-{{ $testimonial->id }}').classList.add('hidden');
+                                        document.getElementById('testimonial-modal-{{ $testimonial->id }}').classList.remove('flex');">
+                                    </div>
+
+                                    <!-- content -->
+                                    <div class="relative z-10 max-w-5xl w-full flex flex-col items-end">
+
+                                        <!-- tombol close -->
+                                        <button
+                                            onclick="document.getElementById('testimonial-modal-{{ $testimonial->id }}').classList.add('hidden');
+                                            document.getElementById('testimonial-modal-{{ $testimonial->id }}').classList.remove('flex');"
+                                            class="mb-4 bg-black/50 text-white px-4 py-2 rounded-full hover:text-red-500 transition-colors">
+
+                                            Tutup
+                                        </button>
+
+                                        <!-- gambar besar -->
+                                        <img src="{{ asset('storage/' . $testimonial->photo) }}"
+                                            class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl">
+                                    </div>
+                                </div>
+                            @endif
+
                             <p class="text-gray-600 mb-6 italic">"{{ $testimonial->content }}"</p>
                             <div class="flex items-center">
                                 <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
-                                    <span class="text-primary-600 font-bold text-lg">{{ substr($testimonial->customer_name, 0, 1) }}</span>
+                                    <span
+                                        class="text-primary-600 font-bold text-lg">{{ substr($testimonial->customer_name, 0, 1) }}</span>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-gray-900">{{ $testimonial->customer_name }}</h4>
-                                    @if($testimonial->wedding_date)
+                                    @if ($testimonial->wedding_date)
                                         <p class="text-sm text-gray-500">{{ $testimonial->wedding_date }}</p>
                                     @endif
                                 </div>
@@ -53,7 +95,7 @@
                         </div>
                     @endforeach
                 </div>
-                
+
                 <div class="mt-12">
                     {{ $testimonials->links() }}
                 </div>

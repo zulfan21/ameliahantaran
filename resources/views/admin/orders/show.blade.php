@@ -190,50 +190,60 @@
                 </div>
 
                 <!-- Update Status -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="font-semibold text-lg text-gray-900 mb-4">Update Status</h2>
-                    <form action="{{ route('admin.orders.update-status', $order) }}" method="POST">
-                        @csrf
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                                <select name="status"
-                                    class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
-                                    <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending
-                                    </option>
-                                    <option value="waiting_payment"
-                                        {{ $order->status == 'waiting_payment' ? 'selected' : '' }}>Menunggu Pembayaran
-                                    </option>
-                                    <option value="payment_verification"
-                                        {{ $order->status == 'payment_verification' ? 'selected' : '' }}>Verifikasi
-                                        Pembayaran</option>
-                                    <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses
-                                    </option>
-                                    <option value="dikirim" {{ $order->status == 'dikirim' ? 'selected' : '' }}>Dikirim
-                                    </option>
-                                    <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai
-                                    </option>
-                                    <option value="dibatalkan" {{ $order->status == 'dibatalkan' ? 'selected' : '' }}>
-                                        Dibatalkan</option>
-                                </select>
-                            </div>
-
-                            @if ($order->status === 'diproses' || $order->status === 'dikirim')
+                @if ($order->status !== 'selesai' && $order->status !== 'dibatalkan')
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="font-semibold text-lg text-gray-900 mb-4">Update Status</h2>
+                        <form action="{{ route('admin.orders.update-status', $order) }}" method="POST">
+                            @csrf
+                            <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Resi</label>
-                                    <input type="text" name="tracking_number" value="{{ $order->tracking_number }}"
-                                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500"
-                                        placeholder="Masukkan nomor resi">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                    <select name="status"
+                                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
+                                        <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
+                                            Pending
+                                        </option>
+                                        <option value="waiting_payment"
+                                            {{ $order->status == 'waiting_payment' ? 'selected' : '' }}>Menunggu Pembayaran
+                                        </option>
+                                        <option value="payment_verification"
+                                            {{ $order->status == 'payment_verification' ? 'selected' : '' }}>Verifikasi
+                                            Pembayaran</option>
+                                        <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>
+                                            Diproses
+                                        </option>
+                                        <option value="dikirim" {{ $order->status == 'dikirim' ? 'selected' : '' }}>
+                                            Dikirim
+                                        </option>
+                                        <option value="cancel_request"
+                                            {{ $order->status == 'cancel_request' ? 'selected' : '' }}>
+                                            Request Pembatalan
+                                        </option>
+                                        <option value="cancel_rejected"
+                                            {{ $order->status == 'cancel_rejected' ? 'selected' : '' }}>
+                                            Pembatalan Ditolak
+                                        </option>
+                                    </select>
                                 </div>
-                            @endif
 
-                            <button type="submit"
-                                class="w-full bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
-                                Update Status
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                                @if ($order->status === 'diproses' || $order->status === 'dikirim')
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Resi</label>
+                                        <input type="text" name="tracking_number"
+                                            value="{{ $order->tracking_number }}"
+                                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                            placeholder="Masukkan nomor resi">
+                                    </div>
+                                @endif
+
+                                <button type="submit"
+                                    class="w-full bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
+                                    Update Status
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
 
                 <!-- Timeline -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -255,12 +265,37 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($order->status === 'cancel_rejected')
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
+
+                                <div>
+                                    <p class="text-sm font-medium text-orange-600">
+                                        Pembatalan Ditolak
+                                    </p>
+
+                                    <p class="text-xs text-gray-500">
+                                        Pesanan tetap diproses
+                                    </p>
+
+                                    <p class="text-xs text-gray-400">
+                                        {{ $order->updated_at->format('d M Y H:i') }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
                         @if ($order->processed_at)
                             <div class="flex items-center gap-3">
                                 <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">Pesanan Diproses</p>
-                                    <p class="text-xs text-gray-500">{{ $order->processed_at->format('d M Y H:i') }}</p>
+                                    <p class="text-sm font-medium text-gray-900">
+                                        Pesanan Diproses
+                                    </p>
+
+                                    <p class="text-xs text-gray-500">
+                                        {{ $order->processed_at->format('d M Y H:i') }}
+                                    </p>
                                 </div>
                             </div>
                         @endif
@@ -282,8 +317,68 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($order->status === 'dibatalkan')
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Pesanan Dibatalkan</p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ $order->updated_at->format('d M Y H:i') }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
+                @if ($order->status === 'cancel_request')
+                    <div class="bg-orange-50 border border-orange-200 rounded-xl p-6 mt-6">
+
+                        <h3 class="font-semibold text-orange-700 text-lg mb-2">
+                            Request Pembatalan
+                        </h3>
+
+                        <p class="text-sm text-orange-600 mb-4">
+                            Customer mengajukan pembatalan pesanan ini.
+                        </p>
+
+                        @if ($order->cancel_reason)
+                            <div class="bg-white/70 rounded-lg p-4 mb-4">
+                                <p class="text-sm font-medium text-gray-700 mb-1">
+                                    Alasan Pembatalan
+                                </p>
+
+                                <p class="text-sm text-gray-600">
+                                    {{ $order->cancel_reason }}
+                                </p>
+                            </div>
+                        @endif
+
+                        <div class="flex gap-3">
+
+                            <form action="{{ route('admin.orders.approve-cancel', $order) }}" method="POST">
+
+                                @csrf
+
+                                <button type="submit"
+                                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+
+                                    Setujui Pembatalan
+                                </button>
+                            </form>
+
+                            <form action="{{ route('admin.orders.reject-cancel', $order) }}" method="POST">
+                                @csrf
+
+                                <button type="submit"
+                                    class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+
+                                    Tolak
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

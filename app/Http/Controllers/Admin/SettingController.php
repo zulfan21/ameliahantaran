@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
@@ -36,20 +37,41 @@ class SettingController extends Controller
             'qris_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
         ]);
 
-        if ($request->hasFile('qris_image')) {
+        if ($request->cropped_qris) {
 
-            // Ambil QRIS lama
-            $old = Setting::get('qris_image');
+            // ambil gambar lama
+            $old = Setting::where('key', 'qris_image')->value('value');
 
-            // Hapus file lama jika ada
+            // hapus file lama
             if ($old && Storage::disk('public')->exists($old)) {
                 Storage::disk('public')->delete($old);
             }
 
-            // Upload baru
-            $path = $request->file('qris_image')->store('qris', 'public');
+            // decode base64
+            $image = $request->cropped_qris;
 
-            Setting::set('qris_image', $path, 'string', 'payment');
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+
+            // nama file baru
+            $imageName = 'qris/' . Str::random(20) . '.png';
+
+            // simpan file
+            Storage::disk('public')->put(
+                $imageName,
+                base64_decode($image)
+            );
+
+            // update database
+            Setting::updateOrCreate(
+                ['key' => 'qris_image'],
+                [
+                    'value' => $imageName,
+                    'type' => 'string',
+                    'group' => 'payment'
+                ]
+            );
+            cache()->flush();
         }
 
         // General settings

@@ -183,7 +183,9 @@
                             <th class="text-left py-3 px-4 font-medium text-gray-500">Tanggal</th>
                             <th class="text-right py-3 px-4 font-medium text-gray-500">Total</th>
                             <th class="text-center py-3 px-4 font-medium text-gray-500">Status</th>
-                            <th class="text-right py-3 px-4 font-medium text-gray-500">Aksi</th>
+                            <th class="text-right py-3 px-4 font-medium text-gray-500">
+                                Aksi
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -202,8 +204,10 @@
                                 </td>
                                 <td class="py-3 px-4 text-right">
                                     <a href="<?php echo e(route('admin.orders.show', $order)); ?>"
-                                        class="text-primary-600 hover:text-primary-700">
-                                        <i data-lucide="eye" class="w-5 h-5"></i>
+                                        class="inline-flex items-center text-primary-600 hover:text-primary-700">
+
+                                        <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                        Detail
                                     </a>
                                 </td>
                             </tr>

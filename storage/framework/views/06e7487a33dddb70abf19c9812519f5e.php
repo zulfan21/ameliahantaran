@@ -167,6 +167,120 @@
                             </div>
                         </div>
 
+                        <!-- Timeline -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                            <h3 class="font-semibold text-lg text-gray-900 mb-4">
+                                Timeline Pesanan
+                            </h3>
+
+                            <div class="space-y-4">
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full mt-1"></div>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Pesanan Dibuat</p>
+                                        <p class="text-sm text-gray-500">
+                                            <?php echo e($order->created_at->format('d M Y H:i')); ?>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <?php if($order->payment_status !== 'unpaid'): ?>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mt-1"></div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Pembayaran Diterima</p>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if($order->cancel_rejected): ?>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full mt-1"></div>
+
+                                        <div>
+                                            <p class="font-medium text-red-600">
+                                                Pembatalan Ditolak
+                                            </p>
+
+                                            <p class="text-sm text-gray-500">
+                                                Pesanan tetap diproses oleh admin
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if($order->processed_at): ?>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mt-1"></div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Pesanan Diproses</p>
+                                            <p class="text-sm text-gray-500">
+                                                <?php echo e($order->processed_at->format('d M Y H:i')); ?>
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if($order->shipped_at): ?>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mt-1"></div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Pesanan Dikirim</p>
+                                            <p class="text-sm text-gray-500">
+                                                <?php echo e($order->shipped_at->format('d M Y H:i')); ?>
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if($order->completed_at): ?>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mt-1"></div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Pesanan Selesai</p>
+                                            <p class="text-sm text-gray-500">
+                                                <?php echo e($order->completed_at->format('d M Y H:i')); ?>
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if($order->status === 'dibatalkan'): ?>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full mt-1"></div>
+                                        <div>
+                                            <p class="font-medium text-red-600">Pesanan Dibatalkan</p>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                            </div>
+                        </div>
+                        <?php if($order->status === 'cancel_rejected'): ?>
+                            <div class="mt-4 p-4 rounded-xl border border-red-200 bg-red-50">
+                                <div class="flex items-start gap-3">
+
+                                    <i data-lucide="shield-alert" class="w-5 h-5 text-red-500 mt-0.5"></i>
+
+                                    <div>
+                                        <p class="font-semibold text-red-600">
+                                            Permintaan Pembatalan Ditolak
+                                        </p>
+
+                                        <p class="text-sm text-red-500 mt-1">
+                                            Admin menolak pembatalan. Pesanan tetap diproses.
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
                         <!-- Actions -->
                         <div class="space-y-3">
                             <?php if($order->status === 'waiting_payment'): ?>
@@ -177,14 +291,106 @@
                                 </a>
                             <?php endif; ?>
 
-                            <?php if($order->canBeCancelled()): ?>
-                                <form action="<?php echo e(route('orders.cancel', $order->order_number)); ?>" method="POST">
+                            <?php if($order->status === 'diproses' && $order->cancel_rejected != 1): ?>
+                                <button type="button"
+                                    onclick="document.getElementById('cancelModal').classList.remove('hidden');
+                                    document.getElementById('cancelModal').classList.add('flex');"
+                                    class="block w-full border border-red-500 text-red-500 text-center px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+
+                                    <i data-lucide="x-circle" class="w-5 h-5 inline mr-2"></i>
+                                    Batalkan Pesanan
+                                </button>
+
+                                <!-- Modal -->
+                                <div id="cancelModal"
+                                    class="hidden fixed inset-0 z-[9999] bg-black/70 items-center justify-center p-4">
+
+                                    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+
+                                        <h3 class="text-xl font-bold text-gray-900 mb-3">
+                                            Batalkan Pesanan?
+                                        </h3>
+
+                                        <p class="text-gray-600 mb-6">
+                                            Permintaan pembatalan akan dikirim ke admin dan menunggu persetujuan.
+                                        </p>
+                                        <form action="<?php echo e(route('orders.cancel', $order->order_number)); ?>" method="POST">
+
+                                            <?php echo csrf_field(); ?>
+
+                                            <div class="mb-4">
+                                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                                    Alasan Pembatalan
+                                                </label>
+
+                                                <textarea name="cancel_reason" rows="4" required
+                                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                                    placeholder="Contoh: tanggal acara berubah, salah pesan, dll"></textarea>
+                                            </div>
+
+                                            <div class="flex justify-end gap-3">
+
+                                                <button type="button"
+                                                    onclick="document.getElementById('cancelModal').classList.add('hidden');
+                                                    document.getElementById('cancelModal').classList.remove('flex');"
+                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
+
+                                                    Kembali
+                                                </button>
+
+                                                <button type="submit"
+                                                    class="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600">
+
+                                                    Ya, Batalkan
+                                                </button>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if($order->status === 'dikirim'): ?>
+                                <form action="<?php echo e(route('orders.complete', $order->order_number)); ?>" method="POST">
+
                                     <?php echo csrf_field(); ?>
-                                    <button type="submit" onclick="return confirm('Yakin ingin membatalkan pesanan ini?')"
-                                        class="block w-full border border-red-500 text-red-500 text-center px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors">
-                                        <i data-lucide="x-circle" class="w-5 h-5 inline mr-2"></i>
-                                        Batalkan Pesanan
+
+                                    <button type="button"
+                                        onclick="document.getElementById('completeModal').classList.remove('hidden')"
+                                        class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition">
+                                        Pesanan Selesai
                                     </button>
+
+                                    <!-- Modal -->
+                                    <div id="completeModal"
+                                        class="hidden fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+
+                                        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+
+                                            <h3 class="text-xl font-bold text-gray-900 mb-2">
+                                                Konfirmasi Pesanan
+                                            </h3>
+
+                                            <p class="text-gray-600 mb-6">
+                                                Apakah pesanan sudah diterima dengan baik?
+                                            </p>
+
+                                            <div class="flex justify-end gap-3">
+
+                                                <button type="button"
+                                                    onclick="document.getElementById('completeModal').classList.add('hidden')"
+                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
+                                                    Batal
+                                                </button>
+
+                                                <button type="submit"
+                                                    class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">
+                                                    Ya, Selesaikan
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
                             <?php endif; ?>
 

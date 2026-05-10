@@ -39,9 +39,46 @@
                                 </td>
 
                                 <td class="p-4">
-                                    <p class="text-sm text-gray-600 max-w-xs truncate" title="<?php echo e($testimonial->content); ?>">
-                                        <?php echo e($testimonial->content); ?>
+                                    <?php if($testimonial->photo): ?>
+                                        <!-- Thumbnail -->
+                                        <div class="w-20 h-20 rounded-lg overflow-hidden cursor-pointer border border-gray-200"
+                                            onclick="document.getElementById('admin-testimonial-modal-<?php echo e($testimonial->id); ?>').classList.remove('hidden');
+                                            document.getElementById('admin-testimonial-modal-<?php echo e($testimonial->id); ?>').classList.add('flex');">
 
+                                            <img src="<?php echo e(asset('storage/' . $testimonial->photo)); ?>" alt="Foto Testimoni"
+                                                class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                        </div>
+
+                                        <!-- Modal -->
+                                        <div id="admin-testimonial-modal-<?php echo e($testimonial->id); ?>"
+                                            class="hidden fixed inset-0 z-[9999] bg-black/90 items-center justify-center p-4">
+
+                                            <!-- Overlay -->
+                                            <div class="absolute inset-0"
+                                                onclick="document.getElementById('admin-testimonial-modal-<?php echo e($testimonial->id); ?>').classList.add('hidden');
+                                                document.getElementById('admin-testimonial-modal-<?php echo e($testimonial->id); ?>').classList.remove('flex');">
+                                            </div>
+
+                                            <!-- Content -->
+                                            <div class="relative z-10 flex flex-col items-end max-w-6xl w-full">
+
+                                                <!-- Close -->
+                                                <button
+                                                    onclick="document.getElementById('admin-testimonial-modal-<?php echo e($testimonial->id); ?>').classList.add('hidden');
+                                                    document.getElementById('admin-testimonial-modal-<?php echo e($testimonial->id); ?>').classList.remove('flex');"
+                                                    class="mb-4 px-4 py-2 bg-black/50 text-white rounded-full hover:text-red-500 transition-colors">
+
+                                                    Tutup
+                                                </button>
+
+                                                <!-- Image -->
+                                                <img src="<?php echo e(asset('storage/' . $testimonial->photo)); ?>"
+                                                    class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10">
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <p class="text-gray-600 mb-6 italic">"<?php echo e($testimonial->content); ?>"</p>
                                     </p>
                                 </td>
 

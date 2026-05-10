@@ -39,10 +39,79 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, Order $order)
     {
-        $request->validate([
-            'status' => ['required', 'in:pending,waiting_payment,payment_verification,diproses,dikirim,selesai,dibatalkan'],
-            'tracking_number' => ['nullable', 'string', 'max:100'],
-        ]);
+        if (in_array($order->status, ['selesai', 'dibatalkan'])) {
+            return redirect()->back()->with('error', 'Status pesanan tidak dapat diubah lagi.');
+        }
+
+    $request->validate([
+        'status' => ['required', 'in:pending,waiting_payment,payment_verification,diproses,dikirim,selesai,dibatalkan,cancel_rejected'],
+        'tracking_number' => ['nullable', 'string', 'max:100'],
+    ]);
+
+    $currentStatus = $order->status;
+    $newStatus = $request->status;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pesanan belum dibayar / diverifikasi
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        in_array($newStatus, ['diproses', 'dikirim', 'selesai']) &&
+        $order->payment_status !== 'paid'
+    ) {
+        return back()->with(
+            'error',
+            'Pesanan tidak dapat diproses sebelum pembayaran disetujui.'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validasi perpindahan status
+    |--------------------------------------------------------------------------
+    */
+
+    $allowedTransitions = [
+        'pending' => ['waiting_payment', 'dibatalkan'],
+
+        'waiting_payment' => [
+            'payment_verification',
+            'dibatalkan'
+        ],
+
+        'payment_verification' => [
+            'diproses',
+            'dibatalkan'
+        ],
+
+        'diproses' => [
+            'dikirim',
+            'dibatalkan',
+            'cancel_rejected'
+        ],
+
+        'cancel_rejected' => [
+            'dikirim',
+            'selesai'
+        ],
+
+        'dikirim' => [
+            'selesai'
+        ],
+
+        'selesai' => [],
+
+        'dibatalkan' => [],
+    ];
+
+    if (!in_array($newStatus, $allowedTransitions[$currentStatus] ?? [])) {
+        return back()->with(
+            'error',
+            'Perubahan status tidak valid.'
+        );
+    }
 
         $updateData = ['status' => $request->status];
 
@@ -81,5 +150,27 @@ class OrderController extends Controller
         }
 
         return redirect()->back()->with('success', $message);
+    }
+    
+    public function approveCancel(Order $order)
+    {
+        $order->update([
+            'status' => 'dibatalkan'
+        ]);
+
+        return back()->with('success', 'Pembatalan disetujui.');
+    }
+
+    public function rejectCancel(Order $order)
+    {
+        $order->status = 'cancel_rejected';
+        $order->cancel_rejected = true;
+
+        $order->save();
+
+        return back()->with(
+            'success',
+            'Permintaan pembatalan ditolak.'
+        );
     }
 }

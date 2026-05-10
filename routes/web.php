@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pesanan/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/pesanan/{orderNumber}/upload-bukti', [OrderController::class, 'uploadPayment'])->name('orders.upload-payment');
     Route::post('/pesanan/{orderNumber}/batal', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::post('/pesanan/{orderNumber}/selesai', [OrderController::class, 'complete'])->name('orders.complete');
 
     // Testimonials
     Route::get('/testimoni/buat', [TestimonialController::class, 'create'])->name('testimonials.create');
@@ -87,6 +88,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::post('/payments/{paymentProof}/verify', [AdminOrderController::class, 'verifyPayment'])->name('payments.verify');
+    Route::post('/orders/{order}/approve-cancel', [AdminOrderController::class, 'approveCancel'])->name('orders.approve-cancel');
+    Route::post('/orders/{order}/reject-cancel', [AdminOrderController::class, 'rejectCancel'])->name('orders.reject-cancel');
 
     // Testimonials
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
@@ -101,6 +104,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
 });
 
 require __DIR__.'/auth.php';

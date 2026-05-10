@@ -28,6 +28,8 @@ class Order extends Model
         'shipped_at',
         'completed_at',
         'tracking_number',
+        'cancel_reason',
+        'cancel_rejected',
     ];
 
     protected $casts = [
@@ -38,6 +40,7 @@ class Order extends Model
         'processed_at' => 'datetime',
         'shipped_at' => 'datetime',
         'completed_at' => 'datetime',
+        'cancel_rejected' => 'boolean',
     ];
 
     protected static function boot()
@@ -131,6 +134,8 @@ class Order extends Model
             'dikirim' => 'Dikirim',
             'selesai' => 'Selesai',
             'dibatalkan' => 'Dibatalkan',
+            'cancel_request' => 'Permintaan Pembatalan',
+            'cancel_rejected' => 'Pembatalan Ditolak',
         ];
 
         return $labels[$this->status] ?? $this->status;
@@ -146,14 +151,16 @@ class Order extends Model
             'dikirim' => 'indigo',
             'selesai' => 'green',
             'dibatalkan' => 'red',
+            'cancel_request' => 'orange',
         ];
 
         return $colors[$this->status] ?? 'gray';
     }
 
-    public function canBeCancelled(): bool
+    public function canBeCancelled()
     {
-        return in_array($this->status, ['pending', 'waiting_payment']);
+        return $this->status === 'diproses'
+            && $this->payment_status === 'paid';
     }
 
     public function canUploadPayment(): bool
