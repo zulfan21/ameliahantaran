@@ -124,14 +124,14 @@
                                             Pengirim</label>
                                         <input type="text" name="bank_name" id="bank_name"
                                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500"
-                                            placeholder="Contoh: BCA">
+                                            placeholder="Contoh: BCA" required>
                                     </div>
                                     <div>
                                         <label for="account_name" class="block text-sm font-medium text-gray-700 mb-1">Nama
                                             Pengirim</label>
                                         <input type="text" name="account_name" id="account_name"
                                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500"
-                                            placeholder="Nama rekening">
+                                            placeholder="Nama rekening" required>
                                     </div>
                                 </div>
 
