@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 1,
                 'name' => 'Luxury White',
-                'slug' => 'luxury-white',
+                'slug' => 'hantaran',
                 'description' => 'Hantaran seserahan dengan tema putih elegan, dilengkapi dengan bunga artificial premium dan pita satin. Cocok untuk pernikahan dengan konsep modern dan minimalis.',
                 'price' => 75000,
                 'stock' => 15,
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 1,
                 'name' => 'Crystal Double',
-                'slug' => 'crystal-double',
+                'slug' => 'hantaran',
                 'description' => 'Set hantaran ganda dengan hiasan kristal yang memukau. Desain mewah dengan sentuhan glamour untuk momen spesial Anda.',
                 'price' => 100000,
                 'stock' => 10,
@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 2,
                 'name' => 'Ring Box',
-                'slug' => 'ring-box',
+                'slug' => 'hantaran',
                 'description' => 'Kotak cincin pernikahan dengan desain eksklusif. Terbuat dari bahan berkualitas dengan lapisan beludru lembut di dalamnya.',
                 'price' => 50000,
                 'stock' => 25,
@@ -86,7 +86,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 1,
                 'name' => 'Gold Elegance',
-                'slug' => 'gold-elegance',
+                'slug' => 'hantaran',
                 'description' => 'Hantaran dengan tema gold yang mewah dan elegan. Dilengkapi dengan hiasan rantai emas dan bunga premium.',
                 'price' => 150000,
                 'stock' => 8,
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 1,
                 'name' => 'Pink Romance',
-                'slug' => 'pink-romance',
+                'slug' => 'hantaran',
                 'description' => 'Hantaran berwarna pink yang romantis dan manis. Sempurna untuk pernikahan dengan tema warna-warni ceria.',
                 'price' => 85000,
                 'stock' => 12,
@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 3,
                 'name' => 'Bunga Mawar Premium',
-                'slug' => 'bunga-mawar-premium',
+                'slug' => 'hantaran',
                 'description' => 'Bunga mawar artificial premium dengan kualitas terbaik. Tampilan seperti bunga asli dan tahan lama.',
                 'price' => 45000,
                 'stock' => 30,
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($products as $product) {
             Product::create(array_merge($product, [
-                'main_image' => 'products/' . $product['slug'] . '.jpg',
+                'main_image' => 'products/' . $product['slug'] . '.png',
                 'min_order' => 1,
                 'specifications' => json_encode([
                     'Material' => 'Kayu Jati/MDF',
