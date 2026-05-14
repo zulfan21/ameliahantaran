@@ -17,22 +17,49 @@
 
             <!-- Company Info -->
             <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Informasi Perusahaan</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">
+                    Informasi Perusahaan
+                </h2>
+
                 <div class="grid md:grid-cols-2 gap-6">
+
+                    <!-- Nama Perusahaan -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Perusahaan</label>
-                        <input type="text" name="company_name"
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Nama Perusahaan
+                        </label>
+
+                        <input type="text" name="company_name" maxlength="20"
                             value="{{ $settings['company_name'] ?? 'Amelia Hantaran' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500"
                             required>
+
+                        <p class="text-xs text-gray-400 mt-1">
+                            Maksimal 20 karakter
+                        </p>
                     </div>
+
+                    <!-- Tagline -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
-                        <input type="text" name="company_tagline" value="{{ $settings['company_tagline'] ?? '' }}"
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Tagline
+                        </label>
+
+                        <input type="text" name="company_tagline" maxlength="50"
+                            value="{{ $settings['company_tagline'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
+
+                        <p class="text-xs text-gray-400 mt-1">
+                            Maksimal 50 karakter
+                        </p>
                     </div>
+
+                    <!-- Deskripsi -->
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Deskripsi
+                        </label>
+
                         <textarea name="company_description" rows="3"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">{{ $settings['company_description'] ?? '' }}</textarea>
                     </div>
@@ -41,30 +68,53 @@
 
             <!-- Contact Info -->
             <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Kontak</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">
+                    Kontak
+                </h2>
+
                 <div class="grid md:grid-cols-2 gap-6">
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Alamat
+                        </label>
+
                         <textarea name="company_address" rows="2"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">{{ $settings['company_address'] ?? '' }}</textarea>
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Telepon
+                        </label>
+
                         <input type="text" name="company_phone" value="{{ $settings['company_phone'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Email
+                        </label>
+
                         <input type="email" name="company_email" value="{{ $settings['company_email'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp (62xxx)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            WhatsApp (62xxx)
+                        </label>
+
                         <input type="text" name="whatsapp_number" value="{{ $settings['whatsapp_number'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Google Maps URL</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Google Maps URL
+                        </label>
+
                         <input type="url" name="google_maps" value="{{ $settings['google_maps'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
@@ -73,31 +123,55 @@
 
             <!-- Payment Info -->
             <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Pembayaran</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">
+                    Pembayaran
+                </h2>
+
                 <div class="grid md:grid-cols-2 gap-6">
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Bank</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Nama Bank
+                        </label>
+
                         <input type="text" name="bank_name" value="{{ $settings['bank_name'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Rekening</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Nomor Rekening
+                        </label>
+
                         <input type="text" name="bank_account" value="{{ $settings['bank_account'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Atas Nama</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Atas Nama
+                        </label>
+
                         <input type="text" name="bank_account_name" value="{{ $settings['bank_account_name'] ?? '' }}"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Ongkir Default (Rp)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Ongkir Default (Rp)
+                        </label>
+
                         <input type="number" name="shipping_cost" value="{{ $settings['shipping_cost'] ?? 15000 }}"
                             min="0"
                             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
                     </div>
+
+                    <!-- QRIS -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">QRIS</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            QRIS
+                        </label>
+
                         <input type="file" name="qris_image" class="w-full border rounded-lg p-2">
 
                         <!-- Preview Cropper -->
@@ -115,15 +189,20 @@
                         </button>
 
                         <div class="mt-4 hidden" id="cropped-result">
-                            <p class="text-sm text-gray-500 mb-2">Hasil Crop</p>
+                            <p class="text-sm text-gray-500 mb-2">
+                                Hasil Crop
+                            </p>
+
                             <img id="cropped-preview" class="w-40 rounded-lg border">
                         </div>
 
-                        <input type="hidden" name="cropped_qris" id="cropped_qris">>
+                        <input type="hidden" name="cropped_qris" id="cropped_qris">
 
                         @if (!empty($settings['qris_image']))
                             <div class="mt-4">
-                                <p class="text-sm text-gray-500 mb-2">QRIS Saat Ini</p>
+                                <p class="text-sm text-gray-500 mb-2">
+                                    QRIS Saat Ini
+                                </p>
 
                                 <img src="{{ asset('storage/' . $settings['qris_image']) . '?v=' . time() }}"
                                     class="w-40 rounded-lg border">
@@ -133,15 +212,20 @@
                 </div>
             </div>
 
+            <!-- Submit -->
             <div class="flex justify-end">
                 <button type="submit"
                     class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+
                     <i data-lucide="save" class="w-4 h-4 inline mr-2"></i>
+
                     Simpan Pengaturan
                 </button>
             </div>
         </form>
     </div>
+
+    <!-- Cropper -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
@@ -167,7 +251,9 @@
             reader.onload = function(event) {
 
                 preview.src = event.target.result;
+
                 preview.classList.remove('hidden');
+
                 cropButton.classList.remove('hidden');
 
                 if (cropper) {
@@ -200,6 +286,7 @@
 
             // preview hasil crop
             croppedPreview.src = croppedData;
+
             croppedResult.classList.remove('hidden');
 
             // sembunyikan area crop
@@ -210,6 +297,7 @@
 
             // destroy cropper
             cropper.destroy();
+
             cropper = null;
         });
     </script>

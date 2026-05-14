@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCategoryRequest extends FormRequest
 {
@@ -14,11 +15,19 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:categories'],
-            'description' => ['nullable', 'string'],
+            'name' => ['required', 'string', 'max:20'],
+
+            'slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('categories')->ignore($this->category),
+            ],
+
             'icon' => ['nullable', 'string', 'max:50'],
+
             'is_active' => ['boolean'],
+
             'sort_order' => ['integer', 'min:0'],
         ];
     }
@@ -27,7 +36,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama kategori wajib diisi.',
-            'name.max' => 'Nama kategori maksimal 255 karakter.',
+            'name.max' => 'Nama kategori maksimal 20 karakter.',
             'slug.unique' => 'Slug sudah digunakan.',
         ];
     }

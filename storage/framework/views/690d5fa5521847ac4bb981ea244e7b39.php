@@ -1,9 +1,7 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', $product->name . ' - Amelia Hantaran'); ?>
+<?php $__env->startSection('meta_description', Str::limit($product->description, 160)); ?>
 
-@section('title', $product->name . ' - Amelia Hantaran')
-@section('meta_description', Str::limit($product->description, 160))
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Breadcrumb -->
     <div class="bg-gray-50 py-4">
@@ -12,7 +10,7 @@
 
             <nav class="flex items-center text-sm text-gray-500">
 
-                <a href="{{ route('home') }}" class="hover:text-primary-600">
+                <a href="<?php echo e(route('home')); ?>" class="hover:text-primary-600">
 
                     Home
 
@@ -20,7 +18,7 @@
 
                 <i data-lucide="chevron-right" class="w-4 h-4 mx-2"></i>
 
-                <a href="{{ route('products.index') }}" class="hover:text-primary-600">
+                <a href="<?php echo e(route('products.index')); ?>" class="hover:text-primary-600">
 
                     Katalog
 
@@ -30,7 +28,8 @@
 
                 <span class="text-gray-900">
 
-                    {{ $product->name }}
+                    <?php echo e($product->name); ?>
+
 
                 </span>
 
@@ -56,37 +55,37 @@
                         <div id="image-slider" style="cursor: grab;"
                             class="flex h-full transition-transform duration-300 ease-in-out">
 
-                            @foreach ($product->images as $image)
+                            <?php $__currentLoopData = $product->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="min-w-full flex-shrink-0 h-full">
 
-                                    <img src="{{ asset('storage/' . $image->image_path) }}"
+                                    <img src="<?php echo e(asset('storage/' . $image->image_path)); ?>"
                                         class="w-full h-full object-cover pointer-events-none">
 
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                         </div>
 
                     </div>
 
                     <!-- THUMBNAILS -->
-                    @if ($product->images->count() > 0)
+                    <?php if($product->images->count() > 0): ?>
 
                         <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
 
-                            @foreach ($product->images as $image)
-                                <button onclick="changeSlide({{ $loop->index }}, this)"
-                                    class="thumbnail-btn flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all duration-200 {{ $loop->first ? 'border-primary-500' : 'border-transparent' }}">
+                            <?php $__currentLoopData = $product->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <button onclick="changeSlide(<?php echo e($loop->index); ?>, this)"
+                                    class="thumbnail-btn flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all duration-200 <?php echo e($loop->first ? 'border-primary-500' : 'border-transparent'); ?>">
 
-                                    <img src="{{ asset('storage/' . $image->image_path) }}"
+                                    <img src="<?php echo e(asset('storage/' . $image->image_path)); ?>"
                                         class="w-full h-full object-cover">
 
                                 </button>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                         </div>
 
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
@@ -95,13 +94,15 @@
 
                     <span class="text-primary-600 font-medium text-sm uppercase tracking-wide">
 
-                        {{ $product->category->name }}
+                        <?php echo e($product->category->name); ?>
+
 
                     </span>
 
                     <h1 class="font-display text-3xl sm:text-4xl font-bold text-gray-900 mt-2 mb-4">
 
-                        {{ $product->name }}
+                        <?php echo e($product->name); ?>
+
 
                     </h1>
 
@@ -110,23 +111,24 @@
 
                         <span class="text-3xl font-bold text-primary-600">
 
-                            {{ $product->formattedPrice() }}
+                            <?php echo e($product->formattedPrice()); ?>
+
 
                         </span>
 
-                        @if ($product->isInStock())
+                        <?php if($product->isInStock()): ?>
                             <span class="ml-4 px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">
 
                                 Tersedia
 
                             </span>
-                        @else
+                        <?php else: ?>
                             <span class="ml-4 px-3 py-1 bg-red-100 text-red-700 text-sm rounded-full">
 
                                 Stok Habis
 
                             </span>
-                        @endif
+                        <?php endif; ?>
 
                     </div>
 
@@ -135,14 +137,15 @@
 
                         <p class="whitespace-pre-line break-words">
 
-                            {{ $product->description }}
+                            <?php echo e($product->description); ?>
+
 
                         </p>
 
                     </div>
 
                     <!-- SPECIFICATIONS -->
-                    @if ($product->specifications)
+                    <?php if($product->specifications): ?>
 
                         <div class="bg-gray-50 rounded-lg p-6 mb-8">
 
@@ -154,29 +157,31 @@
 
                             <div class="grid grid-cols-2 gap-4">
 
-                                @foreach ($product->specifications as $key => $value)
+                                <?php $__currentLoopData = $product->specifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div>
 
                                         <span class="text-gray-500 text-sm">
 
-                                            {{ $key }}
+                                            <?php echo e($key); ?>
+
 
                                         </span>
 
                                         <p class="font-medium text-gray-900">
 
-                                            {{ $value }}
+                                            <?php echo e($value); ?>
+
 
                                         </p>
 
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             </div>
 
                         </div>
 
-                    @endif
+                    <?php endif; ?>
 
                     <!-- STOCK -->
                     <div class="flex items-center text-sm text-gray-600 mb-6">
@@ -186,7 +191,7 @@
                         <span>
 
                             Stok tersedia:
-                            <strong>{{ $product->stock }}</strong>
+                            <strong><?php echo e($product->stock); ?></strong>
                             unit
 
                         </span>
@@ -196,18 +201,18 @@
                         <span>
 
                             Min. order:
-                            <strong>{{ $product->min_order }}</strong>
+                            <strong><?php echo e($product->min_order); ?></strong>
 
                         </span>
 
                     </div>
 
                     <!-- ADD TO CART -->
-                    @if ($product->isInStock())
-                        <form action="{{ route('cart.add', $product->id) }}" method="POST"
+                    <?php if($product->isInStock()): ?>
+                        <form action="<?php echo e(route('cart.add', $product->id)); ?>" method="POST"
                             class="flex flex-col sm:flex-row gap-4">
 
-                            @csrf
+                            <?php echo csrf_field(); ?>
 
                             <div class="flex items-center border border-gray-200 rounded-lg">
 
@@ -219,9 +224,9 @@
                                 </button>
 
                                 <input type="number" name="quantity" id="quantity" value="1" min="1"
-                                    max="{{ $product->stock }}" class="w-16 text-center border-0 focus:ring-0 py-3">
+                                    max="<?php echo e($product->stock); ?>" class="w-16 text-center border-0 focus:ring-0 py-3">
 
-                                <button type="button" onclick="incrementQty({{ $product->stock }})"
+                                <button type="button" onclick="incrementQty(<?php echo e($product->stock); ?>)"
                                     class="px-4 py-3 text-gray-500 hover:text-primary-600">
 
                                     <i data-lucide="plus" class="w-5 h-5"></i>
@@ -240,17 +245,17 @@
                             </button>
 
                         </form>
-                    @else
+                    <?php else: ?>
                         <button disabled
                             class="w-full bg-gray-300 text-gray-500 px-8 py-3 rounded-lg font-semibold cursor-not-allowed">
 
                             Stok Habis
 
                         </button>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- WHATSAPP -->
-                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281234567890') }}?text=Halo, saya tertarik dengan produk {{ $product->name }}"
+                    <a href="https://wa.me/<?php echo e(\App\Models\Setting::get('whatsapp_number', '6281234567890')); ?>?text=Halo, saya tertarik dengan produk <?php echo e($product->name); ?>"
                         target="_blank"
                         class="mt-4 inline-flex items-center justify-center w-full border-2 border-green-500 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-500 hover:text-white transition-colors">
 
@@ -269,7 +274,7 @@
     </section>
 
     <!-- RELATED PRODUCTS -->
-    @if ($relatedProducts->count() > 0)
+    <?php if($relatedProducts->count() > 0): ?>
 
         <section class="py-12 bg-cream-50">
 
@@ -283,9 +288,28 @@
 
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                    @foreach ($relatedProducts as $relatedProduct)
-                        <x-product-card :product="$relatedProduct" />
-                    @endforeach
+                    <?php $__currentLoopData = $relatedProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $relatedProduct): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if (isset($component)) { $__componentOriginal3fd2897c1d6a149cdb97b41db9ff827a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal3fd2897c1d6a149cdb97b41db9ff827a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.product-card','data' => ['product' => $relatedProduct]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('product-card'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['product' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($relatedProduct)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal3fd2897c1d6a149cdb97b41db9ff827a)): ?>
+<?php $attributes = $__attributesOriginal3fd2897c1d6a149cdb97b41db9ff827a; ?>
+<?php unset($__attributesOriginal3fd2897c1d6a149cdb97b41db9ff827a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal3fd2897c1d6a149cdb97b41db9ff827a)): ?>
+<?php $component = $__componentOriginal3fd2897c1d6a149cdb97b41db9ff827a; ?>
+<?php unset($__componentOriginal3fd2897c1d6a149cdb97b41db9ff827a); ?>
+<?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </div>
 
@@ -293,7 +317,7 @@
 
         </section>
 
-    @endif
+    <?php endif; ?>
 
     <!-- SCRIPT -->
     <script>
@@ -476,4 +500,6 @@
         }
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\zulfa\OneDrive\Documents\amelia-hantaran\resources\views/products/show.blade.php ENDPATH**/ ?>

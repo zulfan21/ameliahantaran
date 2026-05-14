@@ -20,7 +20,7 @@ class HomeController extends Controller
         $categories = Category::active()
             ->withCount('products')
             ->orderBy('sort_order')
-            ->take(6)
+            ->take(8)
             ->get();
 
         $testimonials = Testimonial::approved()

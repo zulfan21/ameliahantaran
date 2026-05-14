@@ -80,6 +80,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Products
     Route::resource('products', AdminProductController::class);
+    Route::post('/products/{product}/upload-images', [AdminProductController::class, 'uploadImages'])->name('products.upload-images');
     Route::delete('/products/{product}/images/{image}', [AdminProductController::class, 'deleteImage'])->name('products.delete-image');
     Route::post('/products/{product}/stock', [AdminProductController::class, 'updateStock'])->name('products.update-stock');
 

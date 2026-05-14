@@ -45,20 +45,44 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
-        // Upload main image
-        if ($request->hasFile('main_image')) {
-            $data['main_image'] = $request->file('main_image')->store('products', 'public');
+        $mainImage = null;
+
+        // Upload multiple images
+        if ($request->hasFile('images')) {
+
+            foreach ($request->file('images') as $index => $image) {
+
+                $path = $image->store('products', 'public');
+
+                // gambar pertama jadi thumbnail utama
+                if ($index === 0) {
+                    $mainImage = $path;
+                }
+
+                $uploadedImages[] = [
+                    'image_path' => $path,
+                    'sort_order' => $index,
+                ];
+            }
         }
+
+        // simpan thumbnail utama
+        $data['main_image'] = $mainImage;
+
+        // hapus images dari data agar tidak error
+        unset($data['images']);
 
         $product = Product::create($data);
 
-        // Upload additional images
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $index => $image) {
+        // simpan semua gambar ke tabel product_images
+        if (!empty($uploadedImages)) {
+
+            foreach ($uploadedImages as $image) {
+
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image_path' => $image->store('products', 'public'),
-                    'sort_order' => $index,
+                    'image_path' => $image['image_path'],
+                    'sort_order' => $image['sort_order'],
                 ]);
             }
         }
@@ -104,6 +128,33 @@ class ProductController extends Controller
             ->with('success', 'Produk berhasil diperbarui.');
     }
 
+    public function uploadImages(Request $request, Product $product)
+    {
+        $request->validate([
+            'images' => ['required', 'array'],
+            'images.*' => [
+                'image',
+                'mimes:jpeg,png,jpg,webp',
+                'max:10240'
+            ],
+        ]);
+
+        foreach ($request->file('images') as $index => $image) {
+
+            $path = $image->store('products', 'public');
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_path' => $path,
+                'sort_order' => $product->images()->count() + $index,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
     public function destroy(Product $product)
     {
         // Delete images
@@ -122,12 +173,38 @@ class ProductController extends Controller
             ->with('success', 'Produk berhasil dihapus.');
     }
 
-    public function deleteImage(ProductImage $image)
+    public function deleteImage(Product $product, ProductImage $image)
     {
+        // cek apakah gambar ini thumbnail utama
+        $isMainImage = $product->main_image === $image->image_path;
+
+        // hapus file
         Storage::disk('public')->delete($image->image_path);
+
+        // hapus database
         $image->delete();
 
-        return redirect()->back()->with('success', 'Gambar berhasil dihapus.');
+        // refresh relasi gambar
+        $product->load('images');
+
+        // jika thumbnail dihapus
+        if ($isMainImage) {
+
+            // ambil gambar pertama tersisa
+            $nextImage = $product->images()
+                ->orderBy('sort_order')
+                ->first();
+
+            // update thumbnail baru
+            $product->update([
+                'main_image' => $nextImage
+                    ? $nextImage->image_path
+                    : null
+            ]);
+        }
+
+        return redirect()->back()
+            ->with('success', 'Gambar berhasil dihapus.');
     }
 
     public function updateStock(Request $request, Product $product)

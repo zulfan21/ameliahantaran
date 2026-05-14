@@ -2,115 +2,349 @@
 
 <?php $__env->startSection('content'); ?>
     <div class="space-y-6">
-        <!-- Header -->
+
+        <!-- HEADER -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Manajemen Produk</h1>
-                <p class="text-gray-600">Kelola produk hantaran Anda</p>
+                <h1 class="text-2xl font-bold text-gray-900">
+                    Manajemen Produk
+                </h1>
+
+                <p class="text-gray-600">
+                    Kelola produk hantaran Anda
+                </p>
             </div>
-            <a href="<?php echo e(route('admin.products.create')); ?>" class="inline-flex items-center bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
+
+            <a href="<?php echo e(route('admin.products.create')); ?>"
+                class="inline-flex items-center bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
+
                 <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+
                 Tambah Produk
+
             </a>
+
         </div>
 
-        <!-- Filters -->
+        <!-- FILTER -->
         <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+
             <form action="<?php echo e(route('admin.products.index')); ?>" method="GET" class="flex flex-wrap gap-4">
+
                 <div class="flex-1 min-w-[200px]">
-                    <input type="text" name="search" value="<?php echo e(request('search')); ?>" placeholder="Cari produk..." 
-                           class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+
+                    <input type="text" name="search" value="<?php echo e(request('search')); ?>" placeholder="Cari produk..."
+                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+
                 </div>
-                <select name="category" onchange="this.form.submit()" class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
-                    <option value="">Semua Kategori</option>
+
+                <select name="category" onchange="this.form.submit()"
+                    class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500">
+
+                    <option value="">
+                        Semua Kategori
+                    </option>
+
                     <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($category->id); ?>" <?php echo e(request('category') == $category->id ? 'selected' : ''); ?>><?php echo e($category->name); ?></option>
+                        <option value="<?php echo e($category->id); ?>" <?php echo e(request('category') == $category->id ? 'selected' : ''); ?>>
+
+                            <?php echo e($category->name); ?>
+
+
+                        </option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
                 </select>
-                <a href="<?php echo e(route('admin.products.index')); ?>" class="px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">
+
+                <a href="<?php echo e(route('admin.products.index')); ?>"
+                    class="px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">
+
                     Reset
+
                 </a>
+
             </form>
+
         </div>
 
-        <!-- Products Table -->
+        <!-- TABLE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+
             <div class="overflow-x-auto">
+
                 <table class="w-full">
+
                     <thead class="bg-gray-50">
+
                         <tr>
-                            <th class="text-left py-3 px-4 font-medium text-gray-500">Produk</th>
-                            <th class="text-left py-3 px-4 font-medium text-gray-500">Kategori</th>
-                            <th class="text-right py-3 px-4 font-medium text-gray-500">Harga</th>
-                            <th class="text-center py-3 px-4 font-medium text-gray-500">Stok</th>
-                            <th class="text-center py-3 px-4 font-medium text-gray-500">Status</th>
-                            <th class="text-right py-3 px-4 font-medium text-gray-500">Aksi</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-500">
+                                Produk
+                            </th>
+
+                            <th class="text-left py-3 px-4 font-medium text-gray-500">
+                                Kategori
+                            </th>
+
+                            <th class="text-right py-3 px-4 font-medium text-gray-500">
+                                Harga
+                            </th>
+
+                            <th class="text-center py-3 px-4 font-medium text-gray-500">
+                                Stok
+                            </th>
+
+                            <th class="text-center py-3 px-4 font-medium text-gray-500">
+                                Status
+                            </th>
+
+                            <th class="text-right py-3 px-4 font-medium text-gray-500">
+                                Aksi
+                            </th>
                         </tr>
+
                     </thead>
+
                     <tbody class="divide-y divide-gray-100">
+
                         <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr class="hover:bg-gray-50">
+
+                                <!-- PRODUK -->
                                 <td class="py-3 px-4">
+
                                     <div class="flex items-center gap-3">
-                                        <img src="<?php echo e(asset('storage/' . $product->main_image)); ?>" 
-                                             alt="<?php echo e($product->name); ?>" 
-                                             class="w-12 h-12 rounded-lg object-cover"
-                                             onerror="this.src='https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=50&h=50&fit=crop'">
+
+                                        <img src="<?php echo e($product->images->first()
+                                            ? asset('storage/' . $product->images->first()->image_path)
+                                            : asset('storage/' . $product->main_image)); ?>"
+                                            alt="<?php echo e($product->name); ?>" class="w-12 h-12 rounded-lg object-cover"
+                                            onerror="this.src='https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=50&h=50&fit=crop'">
+
                                         <div>
-                                            <p class="font-medium text-gray-900"><?php echo e($product->name); ?></p>
+
+                                            <p class="font-medium text-gray-900">
+                                                <?php echo e($product->name); ?>
+
+                                            </p>
+
                                             <?php if($product->is_featured): ?>
-                                                <span class="text-xs text-primary-600">Unggulan</span>
+                                                <span class="text-xs text-primary-600">
+                                                    Unggulan
+                                                </span>
                                             <?php endif; ?>
+
                                         </div>
+
                                     </div>
+
                                 </td>
-                                <td class="py-3 px-4"><?php echo e($product->category->name); ?></td>
-                                <td class="py-3 px-4 text-right font-medium"><?php echo e($product->formattedPrice()); ?></td>
+
+                                <!-- KATEGORI -->
+                                <td class="py-3 px-4">
+
+                                    <?php echo e($product->category->name); ?>
+
+
+                                </td>
+
+                                <!-- HARGA -->
+                                <td class="py-3 px-4 text-right font-medium">
+
+                                    <?php echo e($product->formattedPrice()); ?>
+
+
+                                </td>
+
+                                <!-- STOK -->
                                 <td class="py-3 px-4 text-center">
-                                    <span class="px-2 py-1 rounded-full text-sm <?php echo e($product->stock < 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'); ?>">
+
+                                    <span
+                                        class="px-2 py-1 rounded-full text-sm
+                                    <?php echo e($product->stock < 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'); ?>">
+
                                         <?php echo e($product->stock); ?>
 
+
                                     </span>
+
                                 </td>
+
+                                <!-- STATUS -->
                                 <td class="py-3 px-4 text-center">
-                                    <span class="px-2 py-1 rounded-full text-sm <?php echo e($product->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'); ?>">
+
+                                    <span
+                                        class="px-2 py-1 rounded-full text-sm
+                                    <?php echo e($product->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'); ?>">
+
                                         <?php echo e($product->is_active ? 'Aktif' : 'Nonaktif'); ?>
 
+
                                     </span>
+
                                 </td>
+
+                                <!-- AKSI -->
                                 <td class="py-3 px-4 text-right">
+
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="<?php echo e(route('admin.products.edit', $product)); ?>" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+
+                                        <!-- EDIT -->
+                                        <a href="<?php echo e(route('admin.products.edit', $product)); ?>"
+                                            class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+
                                             <i data-lucide="edit" class="w-4 h-4"></i>
+
                                         </a>
-                                        <form action="<?php echo e(route('admin.products.destroy', $product)); ?>" method="POST" class="inline">
+
+                                        <!-- DELETE -->
+                                        <form id="delete-form-<?php echo e($product->id); ?>"
+                                            action="<?php echo e(route('admin.products.destroy', $product)); ?>" method="POST"
+                                            class="inline">
+
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('DELETE'); ?>
-                                            <button type="submit" onclick="return confirm('Yakin ingin menghapus produk ini?')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg">
+
+                                            <button type="button"
+                                                onclick="openDeleteModal(<?php echo e($product->id); ?>, '<?php echo e($product->name); ?>')"
+                                                class="p-2 text-red-600 hover:bg-red-50 rounded-lg">
+
                                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
+
                                             </button>
+
                                         </form>
+
                                     </div>
+
                                 </td>
+
                             </tr>
+
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+
                             <tr>
+
                                 <td colspan="6" class="py-8 text-center text-gray-500">
+
                                     Tidak ada produk ditemukan
+
                                 </td>
+
                             </tr>
                         <?php endif; ?>
+
                     </tbody>
+
                 </table>
-            </div>
-            
-            <!-- Pagination -->
-            <div class="p-4 border-t border-gray-100">
-                <?php echo e($products->links()); ?>
 
             </div>
+
+            <!-- PAGINATION -->
+            <div class="p-4 border-t border-gray-100">
+
+                <?php echo e($products->links()); ?>
+
+
+            </div>
+
         </div>
+
     </div>
+
+    <!-- DELETE MODAL -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 mx-4">
+
+            <div class="flex items-center justify-center w-14 h-14 mx-auto bg-red-100 rounded-full mb-4">
+
+                <i data-lucide="trash-2" class="w-7 h-7 text-red-600"></i>
+
+            </div>
+
+            <h2 class="text-xl font-bold text-center text-gray-900 mb-2">
+
+                Hapus Produk
+
+            </h2>
+
+            <p class="text-gray-600 text-center mb-6">
+
+                Yakin ingin menghapus produk
+
+                <span id="productName" class="font-semibold text-gray-900"></span>?
+
+            </p>
+
+            <div class="flex gap-3">
+
+                <button onclick="closeDeleteModal()"
+                    class="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">
+
+                    Batal
+
+                </button>
+
+                <button id="confirmDeleteBtn" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+
+                    Ya, Hapus
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let selectedForm = null;
+
+        function openDeleteModal(productId, productName) {
+
+            selectedForm =
+                document.getElementById(`delete-form-${productId}`);
+
+            document.getElementById('productName')
+                .textContent = productName;
+
+            const modal =
+                document.getElementById('deleteModal');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDeleteModal() {
+
+            const modal =
+                document.getElementById('deleteModal');
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('confirmDeleteBtn')
+            .addEventListener('click', function() {
+
+                if (selectedForm) {
+
+                    selectedForm.submit();
+                }
+            });
+
+        window.addEventListener('click', function(e) {
+
+            const modal =
+                document.getElementById('deleteModal');
+
+            if (e.target === modal) {
+
+                closeDeleteModal();
+            }
+        });
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\zulfa\OneDrive\Documents\amelia-hantaran\resources\views/admin/products/index.blade.php ENDPATH**/ ?>
