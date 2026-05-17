@@ -39,14 +39,11 @@
                         @enderror
                     </div>
                     
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center">
                         <label class="flex items-center">
                             <input type="checkbox" name="remember" class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
                             <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
                         </label>
-                        <a href="{{ route('password.request') }}" class="text-sm text-primary-600 hover:text-primary-700">
-                            Lupa password?
-                        </a>
                     </div>
                     
                     <button type="submit" class="w-full bg-primary-500 text-white py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors">
